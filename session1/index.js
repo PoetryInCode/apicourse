@@ -1,7 +1,7 @@
 import  express from 'express';
 const app = express();
-app.use(express.json())
-// const sqlite3 = iimporire("sqlite3").verbose();
+
+app.use(express.json());
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite'
 
@@ -15,8 +15,6 @@ async function createDbConnection() {
             return console.error(error.message);
         }
     });
- //   console.log("Connection with SQLite has been established");
-   // return db;
 }
 
 async function createUserTable(db) {
@@ -33,7 +31,6 @@ async function createUserTable(db) {
 }
 
 async function insertRow(db,row) {
- //   const [name, color, weight] = process.argv.slice(2);
     console.log("InsertRow");
     return db.run(
         `INSERT INTO users (id, firstName, lastName, email) VALUES (?, ?, ?, ?)`,
@@ -49,7 +46,6 @@ async function insertRow(db,row) {
 
 
 function getAll(db) {
-
      db.all(
         `SELECT * FROM users`, (error, rows) => {
             if (error) {
@@ -71,7 +67,6 @@ async function getOne(db,id) {
     const result = await db.get('SELECT * FROM users WHERE id = ?', id)
     return result;
 }
-
 
 
 
@@ -166,9 +161,20 @@ app.delete('/api/users', function (req, res) {
     res.json([{ user: 'Fred' }, { user: 'Jane' }]);
 })
 
+app.get('/', function (req, res) {
+    res.send('Hello World <h1>Hi</h1><h2>There!</h2>');
+});
+
+app.get('/users', function (req, res) {
+    res.json([{ user: 'Fred' }, { user: 'Jane' }]);
+});
+
+app.get('/cars/colors', (req, res) => {
+    res.json(["red", "green", "blue", "white", "grey"]);
+});
 
 const server = app.listen(8081, function () {
     const host = server.address().address
     const port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)
-})
+});
